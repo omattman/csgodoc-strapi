@@ -3,7 +3,7 @@ import { InferGetServerSidePropsType } from 'next'
 import styled from "@emotion/styled";
 import fetch from "isomorphic-unfetch";
 
-import Player from "../../components/Player"
+import VideoPlayer from "../../components/VideoPlayer"
 import Layout from '../../components/Layout'
 
 function MapIndex({ map }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -18,7 +18,7 @@ function MapIndex({ map }: InferGetServerSidePropsType<typeof getServerSideProps
           <Wrapper>
             <UtilityMedia>
               <p>{map.name}</p>
-              <Player url={videoUrl} autoplay={autoPlay} playing={videoPlay} />
+              <VideoPlayer url={videoUrl} autoplay={autoPlay} playing={videoPlay} />
               <CalloutsImage>
                 <img src={`http://localhost:1337` + map.callouts_image.formats.medium.url} />
               </CalloutsImage>
@@ -27,7 +27,7 @@ function MapIndex({ map }: InferGetServerSidePropsType<typeof getServerSideProps
               <div>
                 {map.utilities.map((utility, index) => {
                   return (
-                    <React.Fragment>
+                    <React.Fragment key={index}>
                       {utility.team === 1 &&
                         <Utility onClick={() => [
                           setVideoURl(utility.video),
@@ -40,7 +40,7 @@ function MapIndex({ map }: InferGetServerSidePropsType<typeof getServerSideProps
                           </UtilityDescription>
                           {utility.images.map((image, index) => {
                             return (
-                              <UtilityThumbnail style={{
+                              <UtilityThumbnail key={index} style={{
                                 backgroundImage: "url(" + "http://localhost:1337" + image.formats.large.url + ")",
                                 backgroundPosition: 'center',
                                 backgroundSize: '300% 300%',
@@ -81,6 +81,7 @@ const App = styled.div`
   flex-direction: column;
   --column-max-width: 100px;
   background: #202225;
+  color: #eeeeee;
   padding: 0px;
   margin: 0px;
 `
