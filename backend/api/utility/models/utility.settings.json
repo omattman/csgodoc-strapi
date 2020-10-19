@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "utilities",
+  "info": {
+    "name": "utility",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "video": {
+      "type": "string"
+    },
+    "images": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "map": {
+      "via": "utilities",
+      "model": "map"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "smoke",
+        "flash",
+        "molotov",
+        "grenade"
+      ]
+    },
+    "team": {
+      "model": "team",
+      "via": "utilities"
+    }
+  }
+}
