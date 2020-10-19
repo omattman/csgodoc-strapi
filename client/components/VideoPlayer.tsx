@@ -20,7 +20,7 @@ type Props = {
   playing: boolean
 }
 
-const Player = ({ url, autoplay, playing }: Props) => {
+const VideoPlayer = ({ url, autoplay, playing }: Props) => {
   return (
     <PlayerWrapper>
       <StyledReactPlayer
@@ -44,4 +44,4 @@ const Player = ({ url, autoplay, playing }: Props) => {
   )
 }
 
-export default Player;
+export default VideoPlayer;

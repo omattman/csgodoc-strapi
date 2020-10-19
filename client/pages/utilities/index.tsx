@@ -4,7 +4,7 @@ import fetch from "isomorphic-unfetch";
 
 import { Utility } from '../../interfaces'
 
-import Player from "../../components/Player"
+import VideoPlayer from "../../components/VideoPlayer"
 
 type Props = {
   utilities: Utility[]
@@ -20,7 +20,7 @@ function UtilitiesPage({ utilities }: Props) {
             <p>{utility.map.name}</p>
             <p>{utility.team.name}</p>
             <p>{utility.type}</p>
-            <Player url={utility.video} />
+            <VideoPlayer url={utility.video} />
           </div>
         )
       })}
