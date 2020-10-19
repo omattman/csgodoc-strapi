@@ -30,7 +30,7 @@ function SubmitUtility() {
   })
 
   const mouseClicker = event => {
-    let svgElem = document.getElementById("svgID")
+    let svgElem = document.getElementById("svgID") as unknown as SVGSVGElement;
     let pos = svgElem.createSVGPoint();
 
     // Returns a DOMMatrix representing the matrix that transforms
