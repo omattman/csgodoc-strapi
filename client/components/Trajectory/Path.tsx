@@ -1,12 +1,13 @@
 import React from "react";
+import styled from "@emotion/styled";
 
 // TODO: Oh boi this is some mess. Please clean it up hehe.
 
-function LineSVG(props) {
+function Path(props) {
   if (props.lines === "1") {
     if (props.endX !== 0) {
       return (
-        <line
+        <Line
           x1={props.startX}
           x2={props.endX}
           y1={props.startY}
@@ -17,7 +18,7 @@ function LineSVG(props) {
   } else if (props.lines === "2") {
     if (props.midX !== 0 && props.endX === 0) {
       return (
-        <line
+        <Line
           x1={props.startX}
           x2={props.midX}
           y1={props.startY}
@@ -27,14 +28,14 @@ function LineSVG(props) {
     } else if (props.midX !== 0 && props.endX !== 0) {
       return (
         <React.Fragment>
-          <line
+          <Line
             x1={props.startX}
             x2={props.midX}
             y1={props.startY}
             y2={props.midY}
           />
           <circle cx={props.midX} cy={props.midY} r=".001" />
-          <line
+          <Line
             x1={props.midX}
             x2={props.endX}
             y1={props.midY}
@@ -44,7 +45,7 @@ function LineSVG(props) {
       );
     } else if (props.endX !== 0) {
       return (
-        <line
+        <Line
           x1={props.startX}
           x2={props.endX}
           y1={props.startY}
@@ -59,4 +60,9 @@ function LineSVG(props) {
   }
 }
 
-export default LineSVG;
+const Line = styled.line`
+  stroke: rgba(255,255,255, 0.4);
+  stroke-width: 4;
+`
+
+export default Path;
