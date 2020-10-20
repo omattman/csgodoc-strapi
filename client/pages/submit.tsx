@@ -43,7 +43,7 @@ function SubmitUtility(
     })
   })
 
-  const resetPathStates = () => {
+  const clearSVGPaths = () => {
     setStartX(0)
     setStartY(0)
     setMidX(0)
@@ -60,7 +60,7 @@ function SubmitUtility(
     maps.forEach(map => {
       if (map.name === event.target.value) {
         setMapImage(`http://localhost:1337` + map.callouts_image.url)
-        resetPathStates()
+        clearSVGPaths()
       }
     })
   }
@@ -138,6 +138,7 @@ function SubmitUtility(
           <button type="submit">Submit</button>
         </Form>
       </Formik>
+      <button onClick={clearSVGPaths}>Clean up</button>
       <MapOverlay
         mapImage={mapImage}
         mouseClicker={mouseClicker}
