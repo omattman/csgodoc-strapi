@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import DATA from "../data/mapData";
+import { InferGetServerSidePropsType } from 'next'
+import { Formik, Field, Form, FormikHelpers } from 'formik';
 import MapOverlay from '../components/MapOverlay'
+import { SelectMap, SelectTeam, SelectUtilityType } from '../components/Select/Index'
+import { IUtilityFormValues } from '../interfaces/index'
 
-function SubmitUtility() {
+function SubmitUtility(
+  { maps }: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const [mapChoice, setMapChoice] = useState("Inferno")
   const [mapImage, setMapImage] = useState("")
-  const [selectedOption, setSelectedOption] = useState("Smoke")
+  const [team, setTeam] = useState("ct")
+  const [selectedOption, setSelectedOption] = useState("smoke")
   const [startX, setStartX] = useState(0)
   const [startY, setStartY] = useState(0)
   const [midX, setMidX] = useState(0)
@@ -17,17 +23,39 @@ function SubmitUtility() {
   const [lines, setLines] = useState("1")
 
   // TODO: To be developed
-  // const [selectedSideOption, setSelectedSideOption] = useState("T")
   // const [utilityTitle, setUtilityTitle] = useState("")
   // const [utilityURL, setUtilityURL] = useState("")
 
+  // TODO: Change url to make use of .env file
   useEffect(() => {
-    DATA.forEach(mapObj => {
-      if (mapObj.mapTitle === mapChoice) {
-        setMapImage(mapObj.overlaysrc)
+    maps.forEach(map => {
+      if (map.name === mapChoice) {
+        setMapImage(`http://localhost:1337` + map.callouts_image.url)
       }
     })
   })
+
+  const resetPathStates = () => {
+    setStartX(0)
+    setStartY(0)
+    setMidX(0)
+    setMidY(0)
+    setEndX(0)
+    setEndY(0)
+    setStarterFlag(true)
+    setMidFlag(false)
+  }
+
+  const handleMapChange = event => {
+    setMapChoice(event.target.value)
+
+    maps.forEach(map => {
+      if (map.name === event.target.value) {
+        setMapImage(`http://localhost:1337` + map.callouts_image.url)
+        resetPathStates()
+      }
+    })
+  }
 
   const mouseClicker = event => {
     let svgElem = document.getElementById("svgID") as unknown as SVGSVGElement;
@@ -66,6 +94,36 @@ function SubmitUtility() {
 
   return (
     <div>
+      <Formik
+        initialValues={{
+          firstName: '',
+          lastName: '',
+          email: '',
+        }}
+        onSubmit={(
+          values: Values,
+          { setSubmitting }: FormikHelpers<IUtilityFormValues>
+        ) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            setSubmitting(false);
+          }, 500);
+        }}
+      >
+        <Form>
+          <SelectTeam
+            utilityChoice={selectedOption}
+            handleTeamChange={(e) => setTeam(e.target.value)} />
+          <SelectUtilityType
+            utilityChoice={selectedOption}
+            handleUtilityTypeChange={(e) => setSelectedOption(e.target.value)} />
+          <SelectMap
+            data={maps}
+            mapChoice={mapChoice}
+            handleMapChange={handleMapChange} />
+          <button type="submit">Submit</button>
+        </Form>
+      </Formik>
       <MapOverlay
         mapImage={mapImage}
         mouseClicker={mouseClicker}
@@ -75,11 +133,23 @@ function SubmitUtility() {
         midY={midY}
         endX={endX}
         endY={endY}
+        team={team}
         selectedOption={selectedOption}
         lines={lines}
       />
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  const mapsRes = await fetch(`http://localhost:1337/maps/`);
+  const mapsData = await mapsRes.json();
+
+  return {
+    props: {
+      maps: mapsData
+    }
+  };
 }
 
 export default SubmitUtility;
