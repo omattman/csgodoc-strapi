@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { InferGetServerSidePropsType } from 'next'
-import { Formik, Field, Form, FormikHelpers } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
+
 import MapOverlay from '../components/MapOverlay'
-import { SelectMap, SelectTeam, SelectUtilityType } from '../components/Select/Index'
+import {
+  SelectMap,
+  SelectTeam,
+  SelectUtilityType,
+  SelectLines
+} from '../components/Select/Index'
+
 import { IUtilityFormValues } from '../interfaces/index'
+
 
 function SubmitUtility(
   { maps }: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -81,6 +89,9 @@ function SubmitUtility(
       setStarterFlag(false)
       setMidFlag(true)
     } else if (midFlag && lines === "2") {
+      setMidX(x)
+      setMidY(y)
+      setMidFlag(false)
       // Implement functionality to handle cases
       // where utility might bounce of a wall and
       // change direction, thus needing another line.
@@ -111,16 +122,19 @@ function SubmitUtility(
         }}
       >
         <Form>
-          <SelectTeam
-            utilityChoice={selectedOption}
-            handleTeamChange={(e) => setTeam(e.target.value)} />
-          <SelectUtilityType
-            utilityChoice={selectedOption}
-            handleUtilityTypeChange={(e) => setSelectedOption(e.target.value)} />
           <SelectMap
             data={maps}
             mapChoice={mapChoice}
             handleMapChange={handleMapChange} />
+          <SelectTeam
+            team={team}
+            handleTeamChange={(e) => setTeam(e.target.value)} />
+          <SelectUtilityType
+            utilityChoice={selectedOption}
+            handleUtilityTypeChange={(e) => setSelectedOption(e.target.value)} />
+          <SelectLines
+            lines={lines}
+            handleLinesChange={(e) => setLines(e.target.value)} />
           <button type="submit">Submit</button>
         </Form>
       </Formik>
