@@ -33,3 +33,9 @@ export type Map = {
 export type Team = {
   name: string
 }
+
+export interface IUtilityFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
